@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UBBA Legends Run</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <audio id="homeMusic" src="homemusic.mp3" preload="auto" loop></audio>
+  <audio id="bgMusic" preload="auto" loop></audio>
+  <audio id="runSound" src="run.wav" preload="auto" loop></audio>
+  <audio id="coinSound" src="coin.wav" preload="auto"></audio>
+  <audio id="jumpSound" src="jump.wav" preload="auto"></audio>
+  <audio id="hitSound" src="hit.wav" preload="auto"></audio>
+  <audio id="levelupSound" src="levelup.wav" preload="auto"></audio>
+  <audio id="failSound" src="fail.wav" preload="auto"></audio>
+  <audio id="voice1Sound" src="voice1.mp3" preload="auto"></audio>
+  <audio id="voice2Sound" src="voice2.mp3" preload="auto"></audio>
+
+  <div id="gameRoot"></div>
+
+  <div id="uiLayer">
+    <section id="mainMenu" class="screen active homeScreen">
+      <div class="homeBackground" aria-hidden="true"></div>
+      <div class="homeOverlay" aria-hidden="true"></div>
+
+      <div class="menuShell glassCard">
+        <div class="homeHeader">
+          <img id="logoImage" class="logoImage" src="logo.png" alt="UBBA Legends Run logo">
+          <div class="homeHeaderActions">
+            <button id="leaderboardMenuBtn">Leaderboard</button>
+            <button id="homeMuteBtn">Mute / Unmute</button>
+            <button id="settingsMenuBtn">Music Settings</button>
+            <button id="storyMenuBtn">Special Story</button>
+          </div>
+        </div>
+
+        <div class="homeHero">
+          <div class="homeHeroCopy">
+            <p class="eyebrow">Temple-style college chaos runner</p>
+            <h1 class="heroTitle">UBBA Legends Run</h1>
+            <p class="heroTag">Pick your face, lock the costume, preview the villain, then sprint into the madness.</p>
+
+            <label class="field">
+              <span>Runner Name</span>
+              <input id="playerNameInput" type="text" maxlength="18" placeholder="Enter legend name">
+            </label>
+
+            <div class="menuButtons heroButtons">
+              <button id="startMenuBtn" class="primary">Start Game</button>
+              <button id="previewMenuBtn">Preview Run</button>
+              <button id="charactersMenuBtn">Characters</button>
+            </div>
+          </div>
+
+          <div class="homeSpotlight">
+            <div class="spotlightGrid">
+              <div class="spotlightCard">
+                <span>Character Display</span>
+                <strong id="selectedCharacterName">Uzair</strong>
+                <small>Current runner face and body setup</small>
+              </div>
+              <div class="spotlightCard">
+                <span>Theme Preview</span>
+                <strong id="selectedLevelName">City Road - Level 1</strong>
+                <small id="homeThemePreview">Theme environment shown in the live 3D preview</small>
+              </div>
+              <div class="spotlightCard villainCard">
+                <span>Villain Preview</span>
+                <strong id="selectedVillainName">Old Man</strong>
+                <small id="homeVillainPreview">Slow-motion cinematic entry before the countdown</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="homeControlBoard">
+          <label class="field">
+            <span>Character</span>
+            <select id="homeCharacterSelect"></select>
+          </label>
+          <label class="field">
+            <span>Costume Selection</span>
+            <select id="homeCostumeSelect"></select>
+          </label>
+          <label class="field">
+            <span>Theme Preview</span>
+            <select id="homeThemeSelect"></select>
+          </label>
+          <label class="field">
+            <span>Level</span>
+            <select id="homeLevelSelect"></select>
+          </label>
+          <label class="field">
+            <span>Select Music</span>
+            <select id="homeMusicSelect"></select>
+          </label>
+          <label class="field">
+            <span>Select Villain</span>
+            <select id="homeVillainSelect"></select>
+          </label>
+          <div class="field costumePreviewCard">
+            <span>2D / 3D Costume Preview</span>
+            <strong>Live Three.js preview active</strong>
+            <small>The menu scene rotates your selected runner and villain in 3D.</small>
+          </div>
+        </div>
+
+        <div class="disclaimerCard">
+          <p>Hey guys,</p>
+          <p>So I made something fun — a mini 3D game called UBBA Legends Run 🎮</p>
+          <p>It’s inspired by all of us — our faces, our madness, and pure Brindavan energy 😂</p>
+          <p>Don’t expect perfection, just enjoy the vibe.</p>
+          <p>We are one – Brindavan 💙</p>
+          <p>Try it out and tell me how badly you lost 😏</p>
+          <label class="disclaimerChoice">
+            <input id="disclaimerAcknowledge" type="radio" name="disclaimer_ack" checked>
+            <span>I read the disclaimer note</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section id="previewScreen" class="screen">
+      <div class="panelShell glassCard previewShell">
+        <div class="panelHeader">
+          <div>
+            <p class="eyebrow">Temple Run / Subway Surfers style preview</p>
+            <h2>Run Preview</h2>
+            <p>Check the selected character, villain, theme environment, 3D costume feel, and current leaderboard snapshot before the chase begins.</p>
+          </div>
+          <button id="previewBackBtn">Back to Menu</button>
+        </div>
+
+        <div class="previewSummaryGrid">
+          <div class="subPanel previewCardTall">
+            <span>Selected Character</span>
+            <h3 id="previewCharacterText">Uzair in Suit</h3>
+            <p>The live 3D runner preview is visible behind this panel in the scene.</p>
+          </div>
+          <div class="subPanel previewCardTall">
+            <span>Villain Preview</span>
+            <h3 id="previewVillainText">Old Man slow-motion chase</h3>
+            <p>The intro begins with the villain entering slowly before countdown.</p>
+          </div>
+          <div class="subPanel previewCardTall">
+            <span>Theme Environment</span>
+            <h3 id="previewThemeText">City Road</h3>
+            <p>Theme selection updates the background world preview before gameplay.</p>
+          </div>
+          <div class="subPanel previewCardTall">
+            <span>Leaderboard Snapshot</span>
+            <h3 id="previewLeaderboardText">Top legends saved locally.</h3>
+            <p>Latest local records appear here before the run starts.</p>
+          </div>
+          <div class="subPanel previewWideCard">
+            <span>3D Costume Preview</span>
+            <h3>Live runner and villain rotation</h3>
+            <p>The current Three.js scene shows your selected costume, face card, and villain setup in motion.</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="openPreviewLeaderboardBtn">Open Leaderboard</button>
+          <button id="launchRunBtn" class="primary">Start Run</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="characterScreen" class="screen">
+      <div class="panelShell glassCard">
+        <div class="panelHeader">
+          <div>
+            <h2>Choose Character</h2>
+            <p>Pick a face and costume with a more runner-style body.</p>
+          </div>
+          <button id="backToMenuBtn">Back to Menu</button>
+        </div>
+
+        <div id="characterGrid" class="grid"></div>
+
+        <div class="subPanel">
+          <div>
+            <h3>Costumes</h3>
+            <p>Temple Run inspired body shape with transparent face cards.</p>
+          </div>
+          <div id="costumeButtons" class="pillGroup"></div>
+        </div>
+
+        <div class="actions">
+          <button id="characterContinueBtn" class="primary">Continue to Preview</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="levelScreen" class="screen">
+      <div class="panelShell glassCard">
+        <div class="panelHeader">
+          <div>
+            <h2>Select Level</h2>
+            <p>Each level unlocks only after clearing the previous one.</p>
+          </div>
+          <button id="levelBackBtn">Back</button>
+        </div>
+
+        <div id="levelGrid" class="levelGrid"></div>
+
+        <div class="subPanel spotlightPanel">
+          <div>
+            <h3 id="levelSpotlightTitle">Level 1</h3>
+            <p id="levelSpotlightTheme">Theme: City Road</p>
+            <p id="levelSpotlightVillain">Villain: Old Man</p>
+            <p id="levelSpotlightDifficulty">Difficulty: Warmup Chase</p>
+          </div>
+          <div class="actions compact">
+            <button id="previewLevelBtn">Preview Run</button>
+            <button id="levelStartBtn" class="primary">Start Run</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="leaderboardScreen" class="screen">
+      <div class="panelShell glassCard narrow">
+        <div class="panelHeader">
+          <div>
+            <h2>Leaderboard</h2>
+            <p>Top scores saved in localStorage.</p>
+          </div>
+          <button id="leaderboardBackBtn">Back to Menu</button>
+        </div>
+        <ol id="leaderboardList" class="leaderboardList"></ol>
+      </div>
+    </section>
+
+    <section id="settingsScreen" class="screen">
+      <div class="panelShell glassCard narrow">
+        <div class="panelHeader">
+          <div>
+            <h2>Sound Settings</h2>
+            <p>All changes apply in real time.</p>
+          </div>
+          <button id="settingsBackBtn">Back to Menu</button>
+        </div>
+
+        <div class="settingsGrid">
+          <div class="settingRow">
+            <span>Music</span>
+            <button id="musicToggleBtn" class="toggleBtn">ON</button>
+          </div>
+          <label class="sliderRow">
+            <span>Music Volume</span>
+            <input id="musicVolumeSlider" type="range" min="0" max="1" step="0.01">
+          </label>
+
+          <div class="settingRow">
+            <span>Voice</span>
+            <button id="voiceToggleBtn" class="toggleBtn">ON</button>
+          </div>
+          <label class="sliderRow">
+            <span>Voice Volume</span>
+            <input id="voiceVolumeSlider" type="range" min="0" max="1" step="0.01">
+          </label>
+
+          <div class="settingRow">
+            <span>Effects</span>
+            <button id="effectsToggleBtn" class="toggleBtn">ON</button>
+          </div>
+          <label class="sliderRow">
+            <span>Effects Volume</span>
+            <input id="effectsVolumeSlider" type="range" min="0" max="1" step="0.01">
+          </label>
+
+          <label class="settingRow selectRow">
+            <span>Game Track</span>
+            <select id="musicTrackSelector"></select>
+          </label>
+
+          <label class="settingRow selectRow">
+            <span>Preview Theme</span>
+            <select id="previewThemeSelector"></select>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <div id="hud" class="hud hidden">
+      <div class="hudStat"><span>Score</span><strong id="scoreValue">0</strong></div>
+      <div class="hudStat"><span>Coins</span><strong id="coinValue">0</strong></div>
+      <div class="hudStat"><span>Level</span><strong id="levelValue">1</strong></div>
+      <div class="hudStat"><span>Status</span><strong id="statusValue">Running</strong></div>
+      <div class="hudStat"><span>Time</span><strong id="timeValue">0.0s</strong></div>
+      <div class="hudActions">
+        <button id="pauseBtn" class="hudButton">Pause</button>
+        <button id="hudMusicToggleBtn" class="hudButton">Music On</button>
+      </div>
+    </div>
+
+    <div id="countdown" class="countdown hidden">1</div>
+    <div id="centerMessage" class="centerMessage hidden"></div>
+
+    <div id="loseModal" class="overlayCard hidden">
+      <div class="glassCard resultCard">
+        <h2>You Crashed</h2>
+        <img id="loseFaceImage" class="loseFace" src="face.png" alt="Loser face">
+        <p id="loseDialog">Arre bhai, this villain is laughing already.</p>
+        <div class="actions compact">
+          <button id="retryBtn" class="primary">Retry</button>
+          <button id="loseMenuBtn">Menu</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="levelCompleteModal" class="overlayCard hidden">
+      <div class="glassCard resultCard">
+        <h2 id="levelCompleteTitle">Level Complete</h2>
+        <p id="levelCompleteSubtitle">You escaped in style.</p>
+        <div class="statsList">
+          <div><span>Score</span><strong id="completeScore">0</strong></div>
+          <div><span>Coins</span><strong id="completeCoins">0</strong></div>
+          <div><span>Time Survived</span><strong id="completeTime">0.0s</strong></div>
+        </div>
+        <div class="actions compact">
+          <button id="nextLevelBtn" class="primary">Next Level</button>
+          <button id="retryLevelBtn">Replay</button>
+          <button id="completeMenuBtn">Menu</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="storyModal" class="overlayCard hidden">
+      <div class="glassCard storyCard">
+        <button id="closeStoryBtn" class="closeBtn" aria-label="Close story">×</button>
+        <video id="storyVideo" controls playsinline preload="metadata">
+          <source src="specialvid.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script type="module" src="main.js"></script>
+</body>
+</html>
